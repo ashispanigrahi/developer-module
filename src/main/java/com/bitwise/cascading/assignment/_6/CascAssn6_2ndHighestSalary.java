@@ -2,8 +2,8 @@ package com.bitwise.cascading.assignment._6;
 
 
 import java.util.Collections;
+import java.util.Properties;
 
-import cascading.flow.Flow;
 import cascading.flow.FlowConnector;
 import cascading.flow.FlowDef;
 import cascading.flow.FlowProcess;
@@ -16,6 +16,7 @@ import cascading.operation.FunctionCall;
 import cascading.pipe.Each;
 import cascading.pipe.GroupBy;
 import cascading.pipe.Pipe;
+import cascading.property.AppProps;
 import cascading.scheme.local.TextDelimited;
 import cascading.tap.Tap;
 import cascading.tap.local.FileTap;
@@ -23,32 +24,101 @@ import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 import cascading.tuple.TupleEntry;
 
+import com.bitwise.cascading.assignment._3.CascAssn3_Month;
+
 public class CascAssn6_2ndHighestSalary {
     public Pipe salary2ndHighest(Pipe Input_Pipe){
 
+    	
+    	Fields salField = new Fields("sal");
+    	salField.setComparator("sal", Collections.reverseOrder());
+    	Input_Pipe = new GroupBy(Input_Pipe , new Fields("emp_id"),salField);
+    	Input_Pipe = new Each(Input_Pipe, Fields.ALL,new CountFunction(),Fields.ALL);
+    	Fields f1 = new Fields(0,4);
+    	Input_Pipe = new Each(Input_Pipe, f1,new TwoFilter());
+    	
         return  Input_Pipe;
 
     }
 
     public static void main(String[] args) {
+    	
+    	Properties properties = new Properties();
+		AppProps.setApplicationJarClass(properties,
+				CascAssn3_Month.class);
+		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
+		
+        String  sourcePath = args[0];
+      
+        Fields employeeFields = new Fields("emp_id","emp_name","sal","DOJ");
+        Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(employeeFields, false ,","),sourcePath);
+        Pipe sourcePipe = new Pipe("employeepipe");
+      
+        String sinkPath = args[1];
+        Tap<?, ?, ?> sinkTap = new FileTap(new TextDelimited(false ,","),sinkPath);
+        // Pipe sinkPipe =new Pipe("sinkpipe");
+      
+        CascAssn6_2ndHighestSalary cascObj = new CascAssn6_2ndHighestSalary();
+        Pipe outputPipe =cascObj.salary2ndHighest(sourcePipe);
+      
+        FlowDef flowDef = FlowDef.flowDef().addSource(sourcePipe, sourceTap)
+				.addTailSink(outputPipe, sinkTap);
 
-
+		localFlowConnector.connect(flowDef).complete();
     }
 
 }
 
+@SuppressWarnings("rawtypes")
 class CountFunction extends BaseOperation implements Function {
 
-    @Override
-    public void operate(FlowProcess flowProcess, FunctionCall functionCall) {
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Object start =0;
+	int count=1;
+	public CountFunction() {
+	}
 
+	@Override
+    public void operate(FlowProcess flowProcess, FunctionCall functionCall) {
+     TupleEntry tuple = functionCall.getArguments();
+     if(tuple.getObject("emp_id").equals(start))
+    	 count= count+1;
+     else
+    	 count =1;
+     
+     start = tuple.getObject("emp_id");
+     
+     Tuple result = new Tuple();
+     result.add(count);
+     
+     functionCall.getOutputCollector().add( result );
 
     }
 }
 
+@SuppressWarnings("rawtypes")
 class TwoFilter extends BaseOperation implements Filter {
 
-    public boolean isRemove(FlowProcess flowProcess, FilterCall filterCall) {
-        return true;
-    }
+    /**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+	Object start = 0;
+
+	public boolean isRemove(FlowProcess flowProcess, FilterCall filterCall) {
+		TupleEntry tuple = filterCall.getArguments();
+
+		if (tuple.getObject(0).equals(start)
+				&& tuple.getObject(1).toString().equals("2")) {
+			return false;
+		}
+
+		else {
+			start = tuple.getObject(0);
+			return true;
+		}
+	}
 }

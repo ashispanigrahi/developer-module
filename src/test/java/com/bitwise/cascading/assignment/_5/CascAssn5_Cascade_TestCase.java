@@ -18,5 +18,64 @@ import cascading.tuple.Fields;
 import cascading.tuple.Tuple;
 
 public class CascAssn5_Cascade_TestCase {
+	
+	CascAssn5_Cascade casAssn5Obj = new CascAssn5_Cascade();
+	Plunger plunger = new Plunger();
+	
+	Data tran_details_CSV_Data = null;
+    Pipe tran_details_Pipe_CSV = null;
+    
+    @Before
+    public void runFirst(){
+        tran_details_CSV_Data = new DataBuilder(new Fields("accno", "name", "account_balance",
+				"phno"))
+                .addTuple("1001","John","4000","81111")
+                .addTuple("1002","Brian","400","92222")
+                .addTuple("1003","Ashish","8000","79798")
+                .addTuple("1004","Terry","300","89765")
+                .build();
+    }
+    
+    @Test
+    public void findLessThan500Transactions(){
+    	tran_details_Pipe_CSV = plunger.newNamedPipe("tran_details_Pipe_CSV", tran_details_CSV_Data);
+        Pipe OUT_tran_details_Pipe_CSV = casAssn5Obj.acctountBalanceLess500(tran_details_Pipe_CSV);
+        Bucket bucket = plunger.newBucket(Fields.ALL, OUT_tran_details_Pipe_CSV);
+        List<Tuple> actual = bucket.result().asTupleList();
+        
+        assertEquals(actual.size(),2);
+
+        assertEquals(actual.get(0).getString(0),"1002");
+        assertEquals(actual.get(0).getString(1),"Brian");
+        assertEquals(actual.get(0).getString(2),"400");
+        assertEquals(actual.get(0).getString(3),"92222");
+        
+        assertEquals(actual.get(1).getString(0),"1004");
+        assertEquals(actual.get(1).getString(1),"Terry");
+        assertEquals(actual.get(1).getString(2),"300");
+        assertEquals(actual.get(1).getString(3),"89765");
+    }
+    
+    
+    @Test
+    public void findGreaterThan500Transactions(){
+    	tran_details_Pipe_CSV = plunger.newNamedPipe("tran_details_Pipe_CSV", tran_details_CSV_Data);
+        Pipe OUT_tran_details_Pipe_CSV = casAssn5Obj.acctountBalanceMore500(tran_details_Pipe_CSV);
+        Bucket bucket = plunger.newBucket(Fields.ALL, OUT_tran_details_Pipe_CSV);
+        List<Tuple> actual = bucket.result().asTupleList();
+        
+        assertEquals(actual.size(),2);
+
+        assertEquals(actual.get(0).getString(0),"1001");
+        assertEquals(actual.get(0).getString(1),"John");
+        assertEquals(actual.get(0).getString(2),"4000");
+        assertEquals(actual.get(0).getString(3),"81111");
+        
+        assertEquals(actual.get(1).getString(0),"1003");
+        assertEquals(actual.get(1).getString(1),"Ashish");
+        assertEquals(actual.get(1).getString(2),"8000");
+        assertEquals(actual.get(1).getString(3),"79798");
+    	
+    }
 
 }

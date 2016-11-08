@@ -15,6 +15,45 @@ import cascading.tuple.Tuple;
 
 public class CascAssn7_Delete_TestCase {
 
+CascAssn7_Delete cascAssnObj = new CascAssn7_Delete();
+Plunger plunger = new Plunger();
 
+Data dept_CSV_Data = null;
+Data emp_details_CSV_Data = null;
+Pipe emp_details_Pipe_CSV = null;
+Pipe dept_Pipe_CSV = null;
+
+@Before
+public void runFirst(){
+	emp_details_CSV_Data = new DataBuilder(new Fields("emp_id","emp_name","sal","dept_emp_id"))
+            .addTuple("1001","John","4000","501")
+            .addTuple("1002","Terry","5000","502")
+            .addTuple("1003","Brian","8000","501")
+            .addTuple("1004","Zeni","2000","504")
+            .build();
+    
+	dept_CSV_Data = new DataBuilder(new Fields("dept_id","dept_name"))
+    .addTuple("501","ENTC")
+    .addTuple("502","sales")
+    .addTuple("503","sales")
+    .addTuple("504","CIV").build();
+    
+}
+
+@Test
+public void deleteDeptHavingSales(){
+	emp_details_Pipe_CSV = plunger.newNamedPipe("emp_Pipe_CSV", emp_details_CSV_Data);
+	dept_Pipe_CSV = plunger.newNamedPipe("dept_Pipe_CSV", dept_CSV_Data);
+    Pipe OUT_emp_details_Pipe_CSV = cascAssnObj.JoinAndFilter(emp_details_Pipe_CSV, dept_Pipe_CSV);
+    
+    Bucket bucket = plunger.newBucket(Fields.ALL, OUT_emp_details_Pipe_CSV);
+    List<Tuple> actual = bucket.result().asTupleList();
+    
+    assertEquals(actual.size(),3);
+
+    assertEquals(actual.get(0).getString(0),"1001");
+    assertEquals(actual.get(0).getString(1),"John");
+	
+}
 
 }
