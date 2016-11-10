@@ -96,7 +96,7 @@ public class CascAssn7_Delete {
         	TupleEntry tuples = filterCall.getArguments();
         	String deptName = tuples.getString("DeptName");
         	
-        	return (deptName.contains("sales")); //YOU NEED TO REPLACE THE "TRUE" WITH THE BOOLEAN VALUE WHICH WILL BE INFERRED BY THE
+        	return (deptName.toLowerCase().contains("sales")); //YOU NEED TO REPLACE THE "TRUE" WITH THE BOOLEAN VALUE WHICH WILL BE INFERRED BY THE
                          //APPLIED LOGIC
         }
     }

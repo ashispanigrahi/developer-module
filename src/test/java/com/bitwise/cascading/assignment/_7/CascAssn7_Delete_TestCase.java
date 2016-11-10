@@ -34,7 +34,7 @@ public void runFirst(){
     
 	dept_CSV_Data = new DataBuilder(new Fields("DeptNo","DeptName","ManagerNo"))
     .addTuple("501","ENTC","Rahul")
-    .addTuple("502","sales","Rohin")
+    .addTuple("502","SALES","Rohin")
     .addTuple("503","sales","Pri")
     .addTuple("504","CIV","Kishr").build();
     
@@ -51,6 +51,7 @@ public void deleteDeptHavingSales(){
     
     assertEquals(actual.size(),2);
 
+    System.out.println(actual);
     assertEquals(actual.get(0).getString(0),"1001");
     assertEquals(actual.get(0).getString(1),"John");
     assertEquals(actual.get(0).getString(2),"pani");
