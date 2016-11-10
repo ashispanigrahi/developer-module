@@ -26,11 +26,11 @@ public class CascAssn6_2ndHighestSalary_TestCase {
 	
 	 @Before
 	    public void runFirst(){
-		 emp_details_CSV_Data = new DataBuilder(new Fields("emp_id","emp_name","sal","DOJ"))
-	                .addTuple("1001","John","4000","12/02/2016")
-	                .addTuple("1002","Terry","5000","12/02/2016")
-	                .addTuple("1003","Brian","8000","12/02/2016")
-	                .addTuple("1004","Ashish","3000","12/02/2016")
+		 emp_details_CSV_Data = new DataBuilder(new Fields("AccNo","TransTyp","TransAmt","TransDate"))
+	                .addTuple("1001","CP","4000","12/02/2016")
+	                .addTuple("1002","CNP","5000","12/02/2016")
+	                .addTuple("1003","CP","8000","12/02/2016")
+	                .addTuple("1004","CNP","3000","12/02/2016")
 	                .build();
 	    }
  
@@ -42,8 +42,6 @@ public class CascAssn6_2ndHighestSalary_TestCase {
 
 	        Bucket bucket = plunger.newBucket(Fields.ALL, OUT_emp_details_Pipe_CSV);
 	        List<Tuple> actual = bucket.result().asTupleList();
-	        
-	        System.out.println(actual);
-		 
+	        assertEquals(actual.size(),0);
 	 }
 }

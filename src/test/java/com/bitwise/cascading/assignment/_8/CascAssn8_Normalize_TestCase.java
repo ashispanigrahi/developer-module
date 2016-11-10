@@ -28,7 +28,7 @@ public class CascAssn8_Normalize_TestCase {
 
     @Before
     public void runFirst(){
-    	empl_details_CSV_Data = new DataBuilder(new Fields("emp_id","Q1Sal","Q2Sal","Q3Sal","Q4Sal"))
+    	empl_details_CSV_Data = new DataBuilder(new Fields("EmpId","Q1_Salary","Q2_Salary","Q3_Salary","Q4_Salary"))
                 .addTuple("1001","5000","5200","5400","5600")
                 .addTuple("1002","6000","6200","6400","6600")
                 .addTuple("1003","7000","7200","7400","7600")

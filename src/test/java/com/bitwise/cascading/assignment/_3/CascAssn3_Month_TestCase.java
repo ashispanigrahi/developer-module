@@ -27,8 +27,7 @@ public class CascAssn3_Month_TestCase {
     
     @Before
     public void runFirst(){
-        tran_details_CSV_Data = new DataBuilder(new Fields("accno", "name", "DOB", "phno", "city",
-    			"accntbalance"))
+        tran_details_CSV_Data = new DataBuilder(new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance"))
                 .addTuple("1003","John","12/02/2016","8149","PUN","5000")
                 .addTuple("1004","Terry","12/12/2016","8446","DEL","6000")
                 .addTuple("1003","Brian","12/12/2016","1111","BXN","7000")
@@ -37,19 +36,16 @@ public class CascAssn3_Month_TestCase {
     }
     
     @Test
-    public void ExtractMonth() {
+    public void extractMonth() {
     	
     	tran_details_Pipe_CSV = plunger.newNamedPipe("tran_details_Pipe_CSV", tran_details_CSV_Data);
     	
     	Pipe OUT_tran_details_Pipe_CSV = cascMonthObj.extract_month(tran_details_Pipe_CSV);
     	
-    	Bucket bucket = plunger.newBucket(new Fields("accno", "name", "DOB", "phno",
-				"city", "accntbalance","month"), OUT_tran_details_Pipe_CSV);
+    	Bucket bucket = plunger.newBucket(new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance","month"), OUT_tran_details_Pipe_CSV);
         List<Tuple> actual = bucket.result().asTupleList();
         
         assertEquals(actual.size(), 4);
-        
-        System.out.println(actual);
         
         assertEquals(actual.get(0).getString(0),"1003");
         assertEquals(actual.get(0).getString(1),"John");

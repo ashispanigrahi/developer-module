@@ -43,14 +43,12 @@ public class CascAssn3_Month {
 				CascAssn3_Month.class);
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 
-		Fields inputFields = new Fields("accno", "name", "DOB", "phno", "city",
-				"accntbalance");
+		Fields inputFields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance");
 		Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(inputFields, true, ","),
 				sourcePath);
 		Pipe inputPipe = new Pipe("inputpipe");
 
-		Fields outputFields = new Fields("accno", "name", "DOB", "phno",
-				"city", "accntbalance", "month");
+		Fields outputFields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance","month");
 		Tap<?, ?, ?> sinkTap = new FileTap(new TextDelimited(outputFields, true, ","),
 				sinkPath);
 
@@ -73,8 +71,7 @@ class date_to_month extends BaseOperation implements Function {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	static Fields outputFields = new Fields("accno", "name", "DOB", "phno",
-			"city", "accntbalance", "month");
+	static Fields outputFields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance","month");
 
 	public date_to_month() {
 
@@ -86,7 +83,7 @@ class date_to_month extends BaseOperation implements Function {
 		TupleEntry enrty = functionCall.getArguments();
 		Tuple tuple = new Tuple();
 
-		String dob = enrty.getString("DOB");
+		String dob = enrty.getString("Date_Of_Birth");
 		Calendar cal = Calendar.getInstance();
 		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
 
@@ -100,12 +97,12 @@ class date_to_month extends BaseOperation implements Function {
 
 		String monthString = new DateFormatSymbols().getMonths()[month];
 
-		tuple.add(enrty.getLong("accno"));
-		tuple.add(enrty.getString("name"));
-		tuple.add(enrty.getString("DOB"));
-		tuple.add(enrty.getInteger("phno"));
-		tuple.add(enrty.getString("city"));
-		tuple.add(enrty.getString("accntbalance"));
+		tuple.add(enrty.getLong("Account_Number"));
+		tuple.add(enrty.getString("Name"));
+		tuple.add(enrty.getString("Date_Of_Birth"));
+		tuple.add(enrty.getInteger("Phone_Number"));
+		tuple.add(enrty.getString("City"));
+		tuple.add(enrty.getString("Account_Balance"));
 		tuple.add(monthString);
 
 		functionCall.getOutputCollector().add(tuple);

@@ -25,18 +25,18 @@ Pipe dept_Pipe_CSV = null;
 
 @Before
 public void runFirst(){
-	emp_details_CSV_Data = new DataBuilder(new Fields("emp_id","emp_name","sal","dept_emp_id"))
-            .addTuple("1001","John","4000","501")
-            .addTuple("1002","Terry","5000","502")
-            .addTuple("1003","Brian","8000","501")
-            .addTuple("1004","Zeni","2000","504")
+	emp_details_CSV_Data = new DataBuilder(new Fields("EmpId","EmpFirstName","EmpLastName","Gender","Country","EmpSal","DeptNo"))
+            .addTuple("1001","John","pani","Male","IND","4000","501")
+            .addTuple("1002","Terry","Sahoo","Male","UK","5000","502")
+            .addTuple("1003","Brian","BS","Female","USA","8000","502")
+            .addTuple("1004","Zeni","Rout","Male","IND","2000","504")
             .build();
     
-	dept_CSV_Data = new DataBuilder(new Fields("dept_id","dept_name"))
-    .addTuple("501","ENTC")
-    .addTuple("502","sales")
-    .addTuple("503","sales")
-    .addTuple("504","CIV").build();
+	dept_CSV_Data = new DataBuilder(new Fields("DeptNo","DeptName","ManagerNo"))
+    .addTuple("501","ENTC","Rahul")
+    .addTuple("502","sales","Rohin")
+    .addTuple("503","sales","Pri")
+    .addTuple("504","CIV","Kishr").build();
     
 }
 
@@ -49,7 +49,7 @@ public void deleteDeptHavingSales(){
     Bucket bucket = plunger.newBucket(Fields.ALL, OUT_emp_details_Pipe_CSV);
     List<Tuple> actual = bucket.result().asTupleList();
     
-    assertEquals(actual.size(),3);
+    assertEquals(actual.size(),2);
 
     assertEquals(actual.get(0).getString(0),"1001");
     assertEquals(actual.get(0).getString(1),"John");

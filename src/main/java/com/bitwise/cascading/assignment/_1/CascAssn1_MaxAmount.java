@@ -25,10 +25,10 @@ public class CascAssn1_MaxAmount {
 		
 		
 		
-        Fields accountIdField = new Fields("acount_id");
+        Fields accountIdField = new Fields("Account_Number");
 		csvPipe = new GroupBy(csvPipe, accountIdField);
 		
-		Fields amountField = new Fields("transaction_amnt");
+		Fields amountField = new Fields("Transaction_Amount");
 		csvPipe = new Every(csvPipe, amountField, new MaxValue(), Fields.ALL);
 		
 		return csvPipe;
@@ -44,12 +44,12 @@ public class CascAssn1_MaxAmount {
 		AppProps.setApplicationJarClass(properties, CascAssn1_MaxAmount.class);
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 
-		Fields transactionFields = new Fields("acount_id","transaction_type","transaction_amnt","transaction_date");
+		Fields transactionFields = new Fields("Account_Number","Transaction_Type","Transaction_Amount","Transaction_Date");
 		Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(
 				transactionFields, false, ","), sourcePath);
 		Pipe transactionPipe = new Pipe("transaction_pipe");
 
-		Fields outputFields = new Fields("acount_id", "max");
+		Fields outputFields = new Fields("Account_Number", "max");
 		Tap<?, ?, ?> sinkTap = new FileTap(new TextDelimited(outputFields,
 				false, "\t"), sinkPath, SinkMode.KEEP);
 

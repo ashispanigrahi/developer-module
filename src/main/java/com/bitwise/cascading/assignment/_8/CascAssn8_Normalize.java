@@ -35,12 +35,12 @@ public class CascAssn8_Normalize {
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 		
         String  empPath = args[0];
-        Fields employeeFields = new Fields("emp_id","Q1Sal","Q2Sal","Q3Sal","Q4Sal");
+        Fields employeeFields = new Fields("EmpId","Q1_Salary","Q2_Salary","Q3_Salary","Q4_Salary");
         Tap<?, ?, ?> employeeTap = new FileTap(new TextDelimited(employeeFields,true,","),empPath);
         Pipe emp_details_Pipe = new Pipe("empPipe");
         
         String outputPath = args[1];
-        Fields outputFields = new Fields("emp_id","Quarter","Sal");
+        Fields outputFields = new Fields("EmpId","QuaterNo","Salary");
         Tap<?, ?, ?> outputTap = new FileTap(new TextDelimited(outputFields,true,","),outputPath);
         
         CascAssn8_Normalize cascAssn8Obj = new CascAssn8_Normalize();
@@ -63,7 +63,7 @@ public class CascAssn8_Normalize {
 		 * 
 		 */
     	private static final long serialVersionUID = 1L;
-    	static final Fields outputFields = new Fields("emp_id","Quarter","Sal");
+    	static final Fields outputFields = new Fields("EmpId","QuaterNo","Salary");
 
 		public NormalizeFunction() {
 
@@ -75,16 +75,13 @@ public class CascAssn8_Normalize {
             TupleEntry enrty = functionCall.getArguments();
     		Tuple tuple = new Tuple();
 
-    		long q1Sal = enrty.getLong("Q1Sal");
-    		long q2Sal = enrty.getLong("Q2Sal");
-    		long q3Sal = enrty.getLong("Q3Sal");
-    		long q4Sal = enrty.getLong("Q4Sal");
+    		long q1Sal = enrty.getLong("Q1_Salary");
+    		long q2Sal = enrty.getLong("Q2_Salary");
+    		long q3Sal = enrty.getLong("Q3_Salary");
+    		long q4Sal = enrty.getLong("Q4_Salary");
     		
-    		
-    		tuple.add(enrty.getLong("emp_id"));
-    		
+    		tuple.add(enrty.getLong("EmpId"));
     		tuple.add("Q1");
-    		
     		tuple.add(q1Sal);
     		
     		

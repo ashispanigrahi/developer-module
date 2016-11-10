@@ -31,16 +31,16 @@ public class CascAssn4_Join_TestCase {
     
 	@Before
     public void runFirst(){
-        tran_details_CSV_Data = new DataBuilder(new Fields("accouno_tran","transaction_date","transaction_amount"))
-                .addTuple("1003","12/02/2016","4000")
-                .addTuple("1004","12/12/2016","5000")
+        tran_details_CSV_Data = new DataBuilder(new Fields("Account_Number1","Transaction_Type","Transaction_Amount","Transaction_Date"))
+                .addTuple("1003","CP","4000","12/02/2016")
+                .addTuple("1004","CNP","5000","12/12/2016")
                 .build();
         
-        customer_CSV_Data = new DataBuilder(new Fields("account_no","name","dob"))
-        .addTuple("1001","John","12/02/1016")
-        .addTuple("1002","Baina","12/12/1016")
-        .addTuple("1003","Madhia","12/12/1016")
-        .addTuple("1004","Papua","12/09/1016").build();
+        customer_CSV_Data = new DataBuilder(new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number"))
+        .addTuple("1001","John","12/02/1016","1234")
+        .addTuple("1002","Baina","12/12/1016","5432")
+        .addTuple("1003","Madhia","12/12/1016","8888")
+        .addTuple("1004","Papua","12/09/1016","9999").build();
         
     }
 	
@@ -52,8 +52,6 @@ public class CascAssn4_Join_TestCase {
         
         Bucket bucket = plunger.newBucket(Fields.ALL, OUT_tran_details_Pipe_CSV);
         List<Tuple> actual = bucket.result().asTupleList();
-        
-        System.out.println(actual);
         
         assertEquals(actual.size(),2);
 

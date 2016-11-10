@@ -28,21 +28,16 @@ import com.bitwise.cascading.assignment._3.CascAssn3_Month;
 
 public class CascAssn6_2ndHighestSalary {
     public Pipe salary2ndHighest(Pipe Input_Pipe){
-
-    	
-    	Fields salField = new Fields("sal");
-    	salField.setComparator("sal", Collections.reverseOrder());
-    	Input_Pipe = new GroupBy(Input_Pipe , new Fields("emp_id"),salField);
+    	Fields amountField = new Fields("TransAmt");
+    	amountField.setComparator("TransAmt", Collections.reverseOrder());
+    	Input_Pipe = new GroupBy(Input_Pipe , new Fields("AccNo"),amountField);
     	Input_Pipe = new Each(Input_Pipe, Fields.ALL,new CountFunction(),Fields.ALL);
     	Fields f1 = new Fields(0,4);
     	Input_Pipe = new Each(Input_Pipe, f1,new TwoFilter());
-    	
         return  Input_Pipe;
-
     }
 
     public static void main(String[] args) {
-    	
     	Properties properties = new Properties();
 		AppProps.setApplicationJarClass(properties,
 				CascAssn3_Month.class);
@@ -50,9 +45,9 @@ public class CascAssn6_2ndHighestSalary {
 		
         String  sourcePath = args[0];
       
-        Fields employeeFields = new Fields("emp_id","emp_name","sal","DOJ");
-        Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(employeeFields, false ,","),sourcePath);
-        Pipe sourcePipe = new Pipe("employeepipe");
+        Fields transFields = new Fields("AccNo","TransTyp","TransAmt","TransDate");
+        Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(transFields, false ,","),sourcePath);
+        Pipe sourcePipe = new Pipe("transpipe");
       
         String sinkPath = args[1];
         Tap<?, ?, ?> sinkTap = new FileTap(new TextDelimited(false ,","),sinkPath);
@@ -84,12 +79,12 @@ class CountFunction extends BaseOperation implements Function {
 	@Override
     public void operate(FlowProcess flowProcess, FunctionCall functionCall) {
      TupleEntry tuple = functionCall.getArguments();
-     if(tuple.getObject("emp_id").equals(start))
+     if(tuple.getObject("AccNo").equals(start))
     	 count= count+1;
      else
     	 count =1;
      
-     start = tuple.getObject("emp_id");
+     start = tuple.getObject("AccNo");
      
      Tuple result = new Tuple();
      result.add(count);

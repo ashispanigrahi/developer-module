@@ -1,11 +1,7 @@
 package com.bitwise.cascading.assignment._7;
 
-import java.awt.BufferCapabilities.FlipContents;
 import java.util.Properties;
 
-import com.bitwise.cascading.assignment._3.CascAssn3_Month;
-
-import cascading.flow.Flow;
 import cascading.flow.FlowConnector;
 import cascading.flow.FlowDef;
 import cascading.flow.FlowProcess;
@@ -13,11 +9,11 @@ import cascading.flow.local.LocalFlowConnector;
 import cascading.operation.BaseOperation;
 import cascading.operation.Filter;
 import cascading.operation.FilterCall;
-import cascading.operation.expression.ExpressionFilter;
 import cascading.pipe.CoGroup;
 import cascading.pipe.Each;
 import cascading.pipe.Pipe;
 import cascading.pipe.assembly.Discard;
+import cascading.pipe.assembly.Rename;
 import cascading.pipe.joiner.InnerJoin;
 import cascading.property.AppProps;
 import cascading.scheme.local.TextDelimited;
@@ -25,14 +21,18 @@ import cascading.tap.Tap;
 import cascading.tap.local.FileTap;
 import cascading.tuple.Fields;
 import cascading.tuple.TupleEntry;
+
+import com.bitwise.cascading.assignment._3.CascAssn3_Month;
 public class CascAssn7_Delete {
     public Pipe JoinAndFilter(Pipe  empl_details_Pipe_CSV, Pipe dept_details_Pipe_CSV){
 
-       Fields empDeptIdField = new Fields("dept_emp_id");
-       Fields deptIdField = new Fields("dept_id");
+       Fields empDeptIdField = new Fields("DeptNo");
        
-      Fields outputFields = new Fields("emp_id","emp_name","sal","dept_emp_id","dept_id","dept_name");
+       //dept_details_Pipe_CSV = new Rename(dept_details_Pipe_CSV, new Fields("DeptNo"), new Fields("Dept_No"));
+       Fields deptIdField = new Fields("DeptNo");
        
+       Fields outputFields = new Fields("EmpId","EmpFirstName","EmpLastName","Gender","Country","EmpSal","DeptNo","Dept_No","DeptName","ManagerNo");
+      
        Pipe joinPipe = new CoGroup(empl_details_Pipe_CSV,empDeptIdField,dept_details_Pipe_CSV,deptIdField,outputFields, new InnerJoin());
 
        joinPipe = new Each(joinPipe , new filterDeptName());
@@ -47,17 +47,17 @@ public class CascAssn7_Delete {
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 		
         String  empPath = args[0];
-        Fields employeeFields = new Fields("emp_id","emp_name","sal","dept_emp_id");
+        Fields employeeFields = new Fields("EmpId","EmpFirstName","EmpLastName","Gender","Country","EmpSal","DeptNo");
         Tap<?, ?, ?> employeeTap = new FileTap(new TextDelimited(employeeFields,true,","),empPath);
         Pipe emp_details_Pipe = new Pipe("empPipe");
         
         String  deptPath = args[1];
-        Fields deptFields = new Fields("dept_id","dept_name");
+        Fields deptFields = new Fields("DeptNo","DeptName","ManagerNo");
         Tap<?, ?, ?> deptTap = new FileTap(new TextDelimited(deptFields,true,","),deptPath);
         Pipe dept_details_Pipe = new Pipe("deptPipe");
         
         String sinkPath = args[2];
-        Fields sinkFields = new Fields("emp_id","emp_name","sal","dept_id");
+        Fields sinkFields = new Fields("EmpId","EmpFirstName","EmpLastName","Gender","Country","EmpSal","DeptNo");
         Tap<?, ?, ?> sinkTap = new FileTap(new TextDelimited(sinkFields,true,","),sinkPath);
        
 
@@ -76,19 +76,23 @@ public class CascAssn7_Delete {
     }
 
 
-    class filterDeptName extends BaseOperation implements Filter {
+    @SuppressWarnings("rawtypes")
+	class filterDeptName extends BaseOperation implements Filter {
 
-        public filterDeptName() {
-            super(6, Fields.ALL);
+        /**
+		 * 
+		 */
+		private static final long serialVersionUID = 1L;
+
+		public filterDeptName() {
+            super(10, Fields.ALL);
         }
 
         @Override
         public boolean isRemove(FlowProcess flowProcess, FilterCall filterCall) {
 
         	TupleEntry tuples = filterCall.getArguments();
-        	String deptName = tuples.getString("dept_name");
-        	
-           
+        	String deptName = tuples.getString("DeptName");
         	
         	return (deptName.contains("sales")); //YOU NEED TO REPLACE THE "TRUE" WITH THE BOOLEAN VALUE WHICH WILL BE INFERRED BY THE
                          //APPLIED LOGIC

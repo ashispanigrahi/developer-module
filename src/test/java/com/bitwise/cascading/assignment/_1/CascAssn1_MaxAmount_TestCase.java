@@ -27,7 +27,7 @@ public class CascAssn1_MaxAmount_TestCase {
 	
 	 @Before
 	    public void runFirst(){
-	        tran_details_CSV_Data = new DataBuilder(new Fields("acount_id","transaction_type","transaction_amnt","transaction_date"))
+	        tran_details_CSV_Data = new DataBuilder(new Fields("Account_Number","Transaction_Type","Transaction_Amount","Transaction_Date"))
 	                .addTuple("1003","CP","4000","12/02/2016")
 	                .addTuple("1004","CP","5000","12/12/2016")
 	                .addTuple("1003","CNP","8000","12/12/2016")
@@ -40,7 +40,7 @@ public class CascAssn1_MaxAmount_TestCase {
 		tran_details_Pipe_CSV = plunger.newNamedPipe("tran_details_Pipe_CSV", tran_details_CSV_Data);
         Pipe OUT_tran_details_Pipe_CSV = CascAssn1_MaxAmount_Obj.tranWithMaxAmount(tran_details_Pipe_CSV);
 
-        Bucket bucket = plunger.newBucket(new Fields("acount_id","max"), OUT_tran_details_Pipe_CSV);
+        Bucket bucket = plunger.newBucket(new Fields("Account_Number","max"), OUT_tran_details_Pipe_CSV);
         List<Tuple> actual = bucket.result().asTupleList();
 
         assertEquals(actual.size(),2);

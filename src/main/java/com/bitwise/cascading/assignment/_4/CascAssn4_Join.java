@@ -19,10 +19,10 @@ import cascading.tuple.Fields;
 public class CascAssn4_Join {
     public Pipe joinFiles(Pipe  customer_data_Pipe, Pipe transaction_data_Pipe){
 
-    	Fields customerAccountNo = new Fields("account_no");
-    	Fields transactionAccountNo = new Fields("accouno_tran");
+    	Fields customerAccountNo = new Fields("Account_Number");
+    	Fields transactionAccountNo = new Fields("Account_Number1");
     	
-    	Fields outputFields = new Fields("accouno_tran","name","dob","account_no","transaction_date","transaction_amount");
+    	Fields outputFields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","Account_Number1","Transaction_Type","Transaction_Amount","Transaction_Date");
     	  
     	Pipe  	joinPipe = 
     			new CoGroup(customer_data_Pipe,customerAccountNo,transaction_data_Pipe,transactionAccountNo,outputFields,new InnerJoin());
@@ -42,13 +42,13 @@ public class CascAssn4_Join {
 				CascAssn4_Join.class);
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 
-		Fields customerFields = new Fields("account_no","name","dob");
+		Fields customerFields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number");
 		Tap<?, ?, ?> customerTap = new FileTap(new TextDelimited(customerFields, true, ","),
 				customerPath);
 		Pipe customerPipe = new Pipe("customerpipe");
 		
 		
-		Fields transationFields = new Fields("accouno_tran","transaction_date","transaction_amount");
+		Fields transationFields = new Fields("Account_Number1","Transaction_Type","Transaction_Amount","Transaction_Date");
 		Tap<?, ?, ?> transationTap = new FileTap(new TextDelimited(transationFields, true, ","),
 				transactionPath);
 		Pipe transationPipe = new Pipe("transationpipe");

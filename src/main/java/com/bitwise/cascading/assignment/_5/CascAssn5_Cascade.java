@@ -34,9 +34,9 @@ public class CascAssn5_Cascade {
 
 	public Pipe acctountBalanceMore500(Pipe Input_Pipe) {
 
-		Pipe moreThan500Pipe = new Each(Input_Pipe, new balanceAmountCompare());
+		Input_Pipe = new Each(Input_Pipe, new balanceAmountCompare());
 
-		return moreThan500Pipe;
+		return Input_Pipe;
 
 	}
 
@@ -51,8 +51,7 @@ public class CascAssn5_Cascade {
 		AppProps.setApplicationJarClass(properties, CascAssn5_Cascade.class);
 		FlowConnector localFlowConnector = new LocalFlowConnector(properties);
 
-		Fields accountfields = new Fields("accno", "name", "account_balance",
-				"phno");
+		Fields accountfields = new Fields("Account_Number","Name","Date_Of_Birth","Phone_Number","City","Account_Balance");
 		Tap<?, ?, ?> sourceTap = new FileTap(new TextDelimited(accountfields,
 				true, ","), sourcePath);
 		Pipe accountpipe = new Pipe("accountpipe");
@@ -102,7 +101,7 @@ class balanceAmountCompare extends BaseOperation implements Filter {
 	public boolean isRemove(FlowProcess flowProcess, FilterCall call) {
 		TupleEntry tuple = call.getArguments();
 
-		return tuple.getLong("account_balance") <= 500;
+		return tuple.getLong("Account_Balance") <= 500;
 	}
 
 }
