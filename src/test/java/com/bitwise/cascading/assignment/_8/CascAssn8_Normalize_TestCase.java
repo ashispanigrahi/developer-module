@@ -44,11 +44,29 @@ public class CascAssn8_Normalize_TestCase {
         Bucket bucket = plunger.newBucket(Fields.ALL, OUT_emp_details_Pipe_CSV);
         List<Tuple> actual = bucket.result().asTupleList();
         
-        assertEquals(actual.size(),4);
+        assertEquals(actual.size(),16);
 
         assertEquals(actual.get(0).getString(0),"1001");
-        assertEquals(actual.get(0).getString(1),"Q1");
-    	
+        assertEquals(actual.get(0).getString(1),"1");
+        assertEquals(actual.get(0).getString(2),"5000");
+        
+        
+        assertEquals(actual.get(1).getString(0),"1001");
+        assertEquals(actual.get(1).getString(1),"2");
+        assertEquals(actual.get(1).getString(2),"5200");
+        
+        assertEquals(actual.get(2).getString(0),"1001");
+        assertEquals(actual.get(2).getString(1),"3");
+        assertEquals(actual.get(2).getString(2),"5400");
+        
+        assertEquals(actual.get(3).getString(0),"1001");
+        assertEquals(actual.get(3).getString(1),"4");
+        assertEquals(actual.get(3).getString(2),"5600");
+        
+        assertEquals(actual.get(4).getString(0),"1002");
+        assertEquals(actual.get(4).getString(1),"1");
+        assertEquals(actual.get(4).getString(2),"6000");
+        
     }
 
 

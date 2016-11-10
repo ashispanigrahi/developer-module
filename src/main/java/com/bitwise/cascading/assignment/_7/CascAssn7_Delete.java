@@ -35,7 +35,9 @@ public class CascAssn7_Delete {
       
        Pipe joinPipe = new CoGroup(empl_details_Pipe_CSV,empDeptIdField,dept_details_Pipe_CSV,deptIdField,outputFields, new InnerJoin());
 
+       
        joinPipe = new Each(joinPipe , new filterDeptName());
+       joinPipe = new Discard(joinPipe, new Fields("Dept_No","DeptName","ManagerNo"));
 
        return joinPipe; // need to enter the name of the pipe that is being returned
     }
@@ -85,7 +87,7 @@ public class CascAssn7_Delete {
 		private static final long serialVersionUID = 1L;
 
 		public filterDeptName() {
-            super(10, Fields.ALL);
+            super(7, Fields.ALL);
         }
 
         @Override

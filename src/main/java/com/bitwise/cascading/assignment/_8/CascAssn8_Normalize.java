@@ -74,6 +74,9 @@ public class CascAssn8_Normalize {
         public void operate(FlowProcess flowProcess, FunctionCall functionCall) {
             TupleEntry enrty = functionCall.getArguments();
     		Tuple tuple = new Tuple();
+    		Tuple tuple1 = new Tuple();
+    		Tuple tuple2 = new Tuple();
+    		Tuple tuple3 = new Tuple();
 
     		long q1Sal = enrty.getLong("Q1_Salary");
     		long q2Sal = enrty.getLong("Q2_Salary");
@@ -81,11 +84,27 @@ public class CascAssn8_Normalize {
     		long q4Sal = enrty.getLong("Q4_Salary");
     		
     		tuple.add(enrty.getLong("EmpId"));
-    		tuple.add("Q1");
+    		tuple.add("1");
     		tuple.add(q1Sal);
+    		
+    		tuple1.add(enrty.getLong("EmpId"));
+    		tuple1.add("2");
+    		tuple1.add(q2Sal);
+    		
+    		tuple2.add(enrty.getLong("EmpId"));
+    		tuple2.add("3");
+    		tuple2.add(q3Sal);
+    		
+    		tuple3.add(enrty.getLong("EmpId"));
+    		tuple3.add("4");
+    		tuple3.add(q4Sal);
+    		
     		
     		
     		functionCall.getOutputCollector().add(tuple);
+    		functionCall.getOutputCollector().add(tuple1);
+    		functionCall.getOutputCollector().add(tuple2);
+    		functionCall.getOutputCollector().add(tuple3);
 
         }
 
