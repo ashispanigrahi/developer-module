@@ -51,7 +51,7 @@ public void deleteDeptHavingSales(){
     
     assertEquals(actual.size(),2);
 
-    System.out.println(actual);
+    
     assertEquals(actual.get(0).getString(0),"1001");
     assertEquals(actual.get(0).getString(1),"John");
     assertEquals(actual.get(0).getString(2),"pani");
